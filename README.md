@@ -24,7 +24,7 @@ Perl has many special variables that provide access to system information, proce
 | `@_`            | Arguments passed to a subroutine    | `sub example { print $_[0]; }`         |
 | `$1, $2, $3...` | Capture groups from regex matches   | `=~/(\\w+)\\s+(\\w+)/; print "$1 $2";` |
 | `$&`            | The entire matched string           | `print "Matched: $&" if /pattern/;`    |
-| `$``            | String before the match             | `print "Before: $`" if /pattern/;`     |
+| `` $` ``        | String before the match             | ``print "Before: $`" if /pattern/;``   |
 | `$'`            | String after the match              | `print "After: $'" if /pattern/;`      |
 
 #### Examples:
@@ -822,7 +822,7 @@ my $large_data = "x" x 10000;
 print $out $large_data;
 
 # Unbuffered writing for real-time output
-select((select($out), $| = 1)[0]);
+select((select(STDOUT), $| = 1)[0]);
 print $out "Immediate output\n";
 
 # Always close file handles
@@ -1631,3 +1631,624 @@ Perl's IO system is comprehensive and flexible, supporting everything from simpl
 - **Custom IO**: Use ties sparingly and document behavior clearly
 
 Whether you're working with files, networks, databases, or custom IO mechanisms, Perl provides the tools needed for efficient and reliable input/output operations. The key is understanding the strengths and limitations of each IO type and applying them appropriately to your specific requirements.
+
+## Perl Variables and Data Types
+
+### Variable Sigils: $, @, and %
+
+Perl uses different sigils (symbols) to indicate variable types and context:
+
+#### **$ (Scalar Variables)**
+
+- **Single values**: strings, numbers, references
+- **Context**: Scalar context
+- **Examples**:
+
+```perl
+my $name = "John";
+my $age = 30;
+my $price = 19.99;
+my $reference = \@array;  # Reference to array
+```
+
+#### **@ (Array Variables)**
+
+- **Lists of values**: indexed collections
+- **Context**: List context
+- **Examples**:
+
+```perl
+my @fruits = ("apple", "banana", "cherry");
+my @numbers = (1, 2, 3, 4, 5);
+my @mixed = ("text", 42, 3.14);
+
+# Array operations
+push @fruits, "date";
+pop @fruits;  # Remove last element
+shift @fruits;  # Remove first element
+unshift @fruits, "grape";  # Add to beginning
+```
+
+#### **% (Hash Variables)**
+
+- **Key-value pairs**: associative arrays
+- **Context**: List context (when flattened)
+- **Examples**:
+
+```perl
+my %person = (
+    name => "John",
+    age => 30,
+    city => "New York"
+);
+
+# Hash operations
+$person{email} = "john@example.com";  # Add new key
+delete $person{age};  # Remove key
+my @keys = keys %person;  # Get all keys
+my @values = values %person;  # Get all values
+```
+
+#### **Context Matters**
+
+```perl
+my @array = (1, 2, 3, 4, 5);
+my $scalar = @array;  # $scalar = 5 (array length)
+my @list = @array;    # @list = (1, 2, 3, 4, 5) (copy)
+
+my %hash = (a => 1, b => 2);
+my $scalar = %hash;   # $scalar = "2/8" (fractional representation)
+my @list = %hash;     # @list = ("a", 1, "b", 2) (flattened)
+```
+
+## Functions and Subroutines
+
+### Function Declaration and Usage
+
+#### **Basic Subroutine Syntax**
+
+```perl
+sub greet {
+    my ($name, $greeting) = @_;
+    return "$greeting, $name!";
+}
+
+# Calling the function
+my $message = greet("Alice", "Hello");
+print $message;  # Output: Hello, Alice!
+```
+
+#### **Parameter Handling**
+
+```perl
+sub process_data {
+    my ($required, $optional, $rest) = @_;
+
+    # Default values
+    $optional //= "default";
+
+    # Process rest of arguments
+    my @remaining = @_[3..$#_];
+
+    return "Processed: $required, $optional";
+}
+```
+
+#### **Return Values**
+
+```perl
+sub get_coordinates {
+    my ($x, $y) = @_;
+    return ($x, $y);  # Returns a list
+}
+
+sub get_person {
+    my ($name, $age) = @_;
+    return {           # Returns a hash reference
+        name => $name,
+        age => $age
+    };
+}
+
+# Using return values
+my ($lat, $lon) = get_coordinates(40.7128, -74.0060);
+my $person = get_person("John", 30);
+print $person->{name};  # Output: John
+```
+
+#### **Prototypes (Advanced)**
+
+```perl
+sub add($$) {  # Expects exactly 2 scalars
+    my ($a, $b) = @_;
+    return $a + $b;
+}
+
+sub process_array(\@) {  # Expects array reference
+    my ($array_ref) = @_;
+    # Process array
+}
+```
+
+## Command Line Perl: One-liners
+
+### Perl as sed Equivalent
+
+Perl's `-ple` flags make it a powerful command-line text processor, often replacing `sed` and `awk`:
+
+#### **Basic One-liner Structure**
+
+```bash
+perl -ple 's/old/new/g' file.txt
+```
+
+#### **Flag Explanations**
+
+- **`-p`**: Creates a loop that reads each line, processes it, and prints it
+- **`-l`**: Automatically chomps newlines and adds them back on print
+- **`-e`**: Executes the following string as Perl code
+
+#### **Common One-liner Patterns**
+
+**Text Replacement (sed equivalent):**
+
+```bash
+# Replace 'old' with 'new' globally
+perl -ple 's/old/new/g' file.txt
+
+# Case-insensitive replacement
+perl -ple 's/old/new/gi' file.txt
+
+# Replace only on lines containing 'pattern'
+perl -ple 's/old/new/g if /pattern/' file.txt
+```
+
+**Line Processing:**
+
+```bash
+# Print only lines containing 'error'
+perl -ple 'print if /error/i' file.txt
+
+# Print line numbers
+perl -ple 'print "$.: $_"' file.txt
+
+# Remove empty lines
+perl -ple 'print unless /^\s*$/' file.txt
+```
+
+**Field Processing (awk equivalent):**
+
+```bash
+# Print first field of each line
+perl -ple 'print (split /\s+/)[0]' file.txt
+
+# Print lines where field 3 > 100
+perl -ple 'print if (split /\s+/)[2] > 100' file.txt
+
+# Sum field 2
+perl -lane '$sum += $F[1]; END { print $sum }' file.txt
+```
+
+**Advanced Examples:**
+
+```bash
+# Convert Windows line endings to Unix
+perl -ple 's/\r\n/\n/g' file.txt
+
+# Extract email addresses
+perl -ple 'print $& while /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g' file.txt
+
+# JSON pretty print
+perl -ple 'print JSON::PP->new->pretty->encode(decode_json($_))' file.json
+```
+
+## Best Practices: use strict and use warnings
+
+### Why Use These Pragmas?
+
+These are essential for writing robust, maintainable Perl code:
+
+#### **use strict;**
+
+- **Catches common errors** at compile time
+- **Requires variable declaration** with `my`, `our`, or `state`
+- **Prevents typos** in variable names
+- **Enforces better coding practices**
+
+```perl
+use strict;
+
+# This will cause an error:
+$undeclared_var = "value";  # Global symbol "$undeclared_var" requires explicit package name
+
+# This is correct:
+my $declared_var = "value";
+```
+
+#### **use warnings;**
+
+- **Catches runtime warnings** about potential problems
+- **Helps identify bugs** before they cause serious issues
+- **Warns about deprecated features**
+
+```perl
+use warnings;
+
+# These will generate warnings:
+my $result = "5" + "3";     # Argument "3" isn't numeric in addition
+my $undefined;              # Use of uninitialized value
+print $undefined;           # Use of uninitialized value in print
+```
+
+#### **Complete Example**
+
+```perl
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+# All variables must be declared
+my $name = "John";
+my @items = qw(apple banana cherry);
+my %config = (debug => 1, verbose => 0);
+
+# Function with proper parameter handling
+sub process_item {
+    my ($item, $count) = @_;
+
+    # Warnings will catch undefined values
+    return "$count x $item";
+}
+
+# This would cause errors without strict/warnings
+print process_item($items[0], 5), "\n";
+```
+
+## Web and HTTP Programming
+
+### LWP::Simple - Lightweight HTTP Client
+
+`LWP::Simple` provides easy HTTP operations for simple web requests:
+
+#### **Basic Usage**
+
+```perl
+use LWP::Simple;
+
+# Simple GET request
+my $content = get("http://example.com");
+if (defined $content) {
+    print "Content length: " . length($content) . "\n";
+} else {
+    print "Failed to get content\n";
+}
+
+# Download a file
+my $status = getstore("http://example.com/file.txt", "local_file.txt");
+if (is_success($status)) {
+    print "Download successful\n";
+} else {
+    print "Download failed: $status\n";
+}
+```
+
+#### **Common Functions**
+
+```perl
+use LWP::Simple;
+
+# Check if URL exists
+if (head("http://example.com")) {
+    print "URL exists\n";
+}
+
+# Get content with timeout
+my $content = get("http://example.com");
+die "Couldn't get content" unless defined $content;
+
+# Mirror a file (download if newer)
+my $status = mirror("http://example.com/file.txt", "local_file.txt");
+```
+
+### HTTP::Tiny - Modern HTTP Client (Perl 5.10+)
+
+`HTTP::Tiny` is included with Perl 5.10 and later, providing a lightweight HTTP client:
+
+#### **Basic Usage**
+
+```perl
+use HTTP::Tiny;
+
+my $http = HTTP::Tiny->new;
+
+# GET request
+my $response = $http->get('http://example.com');
+if ($response->{success}) {
+    print "Status: $response->{status}\n";
+    print "Content: $response->{content}\n";
+} else {
+    print "Error: $response->{reason}\n";
+}
+```
+
+#### **Advanced Features**
+
+```perl
+use HTTP::Tiny;
+
+my $http = HTTP::Tiny->new(
+    timeout => 10,
+    max_redirect => 5,
+    default_headers => {
+        'User-Agent' => 'MyApp/1.0'
+    }
+);
+
+# POST request
+my $response = $http->post_form(
+    'http://example.com/submit',
+    { name => 'John', age => 30 }
+);
+
+# Custom headers
+my $response = $http->get(
+    'http://example.com/api/data',
+    { headers => { 'Authorization' => 'Bearer token123' } }
+);
+```
+
+### CGI Programming
+
+Perl scripts are excellent for CGI (Common Gateway Interface) web applications:
+
+#### **Basic CGI Script**
+
+```perl
+#!/usr/bin/perl
+use strict;
+use warnings;
+use CGI;
+
+my $cgi = CGI->new;
+
+# Send HTTP headers
+print $cgi->header('text/html');
+
+# Get form parameters
+my $name = $cgi->param('name') || 'Guest';
+my $email = $cgi->param('email');
+
+# Generate HTML
+print $cgi->start_html('My CGI Script');
+print $cgi->h1("Hello, $name!");
+print $cgi->start_form(-method => 'POST');
+print "Name: ", $cgi->textfield('name'), $cgi->br;
+print "Email: ", $cgi->textfield('email'), $cgi->br;
+print $cgi->submit('Submit');
+print $cgi->end_form;
+print $cgi->end_html;
+```
+
+#### **CGI Best Practices**
+
+```perl
+#!/usr/bin/perl
+use strict;
+use warnings;
+use CGI qw(:standard);
+use CGI::Carp qw(fatalsToBrowser);
+
+# Error handling
+eval {
+    # Your CGI code here
+    my $name = param('name');
+    print header, start_html;
+    print h1("Hello, $name!");
+    print end_html;
+};
+if ($@) {
+    print header(-status => '500 Internal Server Error');
+    print "An error occurred: $@";
+}
+```
+
+#### **CGI Security Considerations**
+
+```perl
+use CGI;
+use HTML::Entities;
+
+my $cgi = CGI->new;
+
+# Sanitize user input
+my $user_input = $cgi->param('user_input');
+$user_input = encode_entities($user_input);  # Prevent XSS
+
+# Validate file uploads
+my $upload = $cgi->upload('file');
+if ($upload) {
+    my $filename = $cgi->param('file');
+    # Validate file type and size
+    die "Invalid file type" unless $filename =~ /\.(txt|pdf)$/i;
+}
+```
+
+## Command Line Argument Processing
+
+### Getopt::Long - Advanced Command Line Options
+
+`Getopt::Long` provides sophisticated command-line argument parsing:
+
+#### **Basic Usage**
+
+```perl
+use Getopt::Long;
+use strict;
+use warnings;
+
+# Define variables for options
+my $verbose = 0;
+my $output_file = '';
+my $help = 0;
+my @input_files = ();
+
+# Parse command line options
+GetOptions(
+    'verbose|v' => \$verbose,
+    'output|o=s' => \$output_file,
+    'help|h' => \$help,
+    'input=s@' => \@input_files
+) or die "Usage: $0 [options]\n";
+
+# Handle help
+if ($help) {
+    print "Usage: $0 [options]\n";
+    print "Options:\n";
+    print "  -v, --verbose    Enable verbose output\n";
+    print "  -o, --output     Output file\n";
+    print "  -h, --help       Show this help\n";
+    print "  --input          Input file (can be specified multiple times)\n";
+    exit 0;
+}
+
+# Use the options
+print "Verbose mode: " . ($verbose ? "on" : "off") . "\n";
+print "Output file: $output_file\n" if $output_file;
+print "Input files: " . join(', ', @input_files) . "\n";
+```
+
+#### **Advanced Features**
+
+```perl
+use Getopt::Long;
+use Pod::Usage;
+
+# Complex option handling
+my %config = (
+    verbose => 0,
+    debug => 0,
+    timeout => 30,
+    retries => 3
+);
+
+my @files = ();
+my $mode = 'default';
+
+GetOptions(
+    'verbose|v' => \$config{verbose},
+    'debug|d' => \$config{debug},
+    'timeout|t=i' => \$config{timeout},
+    'retries|r=i' => \$config{retries},
+    'mode|m=s' => \$mode,
+    'file|f=s@' => \@files,
+    'help|h' => sub { pod2usage(1) },
+    'version' => sub { print "Version 1.0\n"; exit 0 }
+) or pod2usage(2);
+
+# Validate options
+die "Timeout must be positive" if $config{timeout} <= 0;
+die "Retries must be between 0 and 10" unless $config{retries} >= 0 && $config{retries} <= 10;
+die "Mode must be 'default', 'fast', or 'safe'" unless $mode =~ /^(default|fast|safe)$/;
+```
+
+#### **Option Types**
+
+```perl
+use Getopt::Long;
+
+my ($flag, $string, $number, $float, @list, %hash);
+
+GetOptions(
+    'flag|f' => \$flag,           # Boolean flag
+    'string|s=s' => \$string,     # String value
+    'number|n=i' => \$number,     # Integer value
+    'float|r=f' => \$float,       # Float value
+    'list|l=s@' => \@list,        # Array of strings
+    'hash|h=s%' => \%hash         # Hash of key=value pairs
+);
+
+# Usage examples:
+# script.pl --flag --string "value" --number 42 --float 3.14
+# script.pl --list file1.txt --list file2.txt
+# script.pl --hash key1=value1 --hash key2=value2
+```
+
+#### **Complete Example**
+
+```perl
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Getopt::Long;
+use File::Basename;
+
+# Script configuration
+my %config = (
+    verbose => 0,
+    dry_run => 0,
+    backup => 1,
+    max_files => 100
+);
+
+my @files = ();
+my $output_dir = '.';
+
+# Parse command line
+GetOptions(
+    'verbose|v' => \$config{verbose},
+    'dry-run|n' => \$config{dry_run},
+    'no-backup' => sub { $config{backup} = 0 },
+    'max-files=i' => \$config{max_files},
+    'output|o=s' => \$output_dir,
+    'file|f=s@' => \@files,
+    'help|h' => \&show_help
+) or show_help();
+
+# Validate
+die "No input files specified\n" unless @files;
+die "Output directory '$output_dir' does not exist\n" unless -d $output_dir;
+
+# Process files
+for my $file (@files) {
+    if ($config{verbose}) {
+        print "Processing: $file\n";
+    }
+
+    if ($config{dry_run}) {
+        print "Would process: $file\n";
+        next;
+    }
+
+    # Actual processing here
+    process_file($file, $output_dir, \%config);
+}
+
+sub show_help {
+    my $script = basename($0);
+    print <<"EOF";
+Usage: $script [options] --file file1 --file file2
+
+Options:
+    -v, --verbose      Enable verbose output
+    -n, --dry-run      Show what would be done without doing it
+    --no-backup        Don't create backup files
+    --max-files=N      Maximum number of files to process (default: 100)
+    -o, --output=DIR   Output directory (default: current directory)
+    -f, --file=FILE    Input file (can be specified multiple times)
+    -h, --help         Show this help message
+
+Examples:
+    $script -v --file input1.txt --file input2.txt
+    $script --dry-run --max-files 50 --output /tmp/processed
+EOF
+    exit 0;
+}
+
+sub process_file {
+    my ($file, $output_dir, $config) = @_;
+    # File processing logic here
+    print "Processing $file to $output_dir\n" if $config->{verbose};
+}
+```
+
+These additions provide comprehensive coverage of essential Perl topics including variable types, functions, command-line usage, web programming, and argument processing. Each section includes practical examples and best practices for effective Perl development.
