@@ -6,7 +6,7 @@ Some tips / things of notes for myself while I'm learning Perl
 
 Perl has many special variables that provide access to system information, process details, and runtime context. These variables are essential for effective Perl programming and script automation.
 
-## Table of Contents
+### Table of Contents
 
 - [Default and Pattern Variables](#default-and-pattern-variables)
 - [Error and Status Variables](#error-and-status-variables)
@@ -16,7 +16,7 @@ Perl has many special variables that provide access to system information, proce
 - [Regular Expression Variables](#regular-expression-variables)
 - [Array and Hash Variables](#array-and-hash-variables)
 
-## Default and Pattern Variables
+### Default and Pattern Variables
 
 | Variable        | Description                         | Example Usage                          |
 | --------------- | ----------------------------------- | -------------------------------------- |
@@ -27,7 +27,7 @@ Perl has many special variables that provide access to system information, proce
 | `$``            | String before the match             | `print "Before: $`" if /pattern/;`     |
 | `$'`            | String after the match              | `print "After: $'" if /pattern/;`      |
 
-### Examples:
+#### Examples:
 
 ```perl
 # Using $_ (default variable)
@@ -49,7 +49,7 @@ if ($text =~ /(\w+)\s+(\w+)/) {
 }
 ```
 
-## Error and Status Variables
+### Error and Status Variables
 
 | Variable | Description                                | Example Usage                            |
 | -------- | ------------------------------------------ | ---------------------------------------- |
@@ -58,7 +58,7 @@ if ($text =~ /(\w+)\s+(\w+)/) {
 | `$?`     | Status of last system command or backticks | `system("ls"); print "Exit code: $?\n";` |
 | `$^E`    | Extended OS error (Windows)                | `print "OS Error: $^E\n";`               |
 
-### Examples:
+#### Examples:
 
 ```perl
 # File operation error handling
@@ -77,7 +77,7 @@ system("false");  # Command that returns non-zero
 print "Command failed with exit code: " . ($? >> 8) . "\n";
 ```
 
-## Process and System Variables
+### Process and System Variables
 
 | Variable | Description                    | Example Usage             |
 | -------- | ------------------------------ | ------------------------- |
@@ -88,7 +88,7 @@ print "Command failed with exit code: " . ($? >> 8) . "\n";
 | `$]`     | Perl version number            | `print "Version: $]\n";`  |
 | `$^V`    | Perl version as version object | `print "Version: $^V\n";` |
 
-### Examples:
+#### Examples:
 
 ```perl
 # Process information
@@ -102,7 +102,7 @@ print $lock "$$\n";
 close $lock;
 ```
 
-## Input/Output Variables
+### Input/Output Variables
 
 | Variable | Description                            | Example Usage                      |
 | -------- | -------------------------------------- | ---------------------------------- | --- | ------------------------- |
@@ -113,7 +113,7 @@ close $lock;
 | `$.`     | Current line number                    | `print "Line $.: $_" while <>;`    |
 | `$       | `                                      | Auto-flush output buffer           | `$  | = 1; # Enable auto-flush` |
 
-### Examples:
+#### Examples:
 
 ```perl
 # Reading entire file at once
@@ -136,7 +136,7 @@ while (<DATA>) {
 }
 ```
 
-## Environment and Context Variables
+### Environment and Context Variables
 
 | Variable | Description                    | Example Usage                         |
 | -------- | ------------------------------ | ------------------------------------- |
@@ -146,7 +146,7 @@ while (<DATA>) {
 | `@INC`   | Module search paths            | `print "Paths: @INC\n";`              |
 | `%INC`   | Loaded modules hash            | `print "Loaded: " . keys(%INC);`      |
 
-### Examples:
+#### Examples:
 
 ```perl
 # Environment variables
@@ -168,7 +168,7 @@ use Data::Dumper;
 print "Data::Dumper loaded from: $INC{'Data/Dumper.pm'}\n";
 ```
 
-## Regular Expression Variables
+### Regular Expression Variables
 
 | Variable | Description                       | Example Usage                        |
 | -------- | --------------------------------- | ------------------------------------ |
@@ -178,7 +178,7 @@ print "Data::Dumper loaded from: $INC{'Data/Dumper.pm'}\n";
 | `@-`     | Start positions of capture groups | `print "Starts at: $-[1]";`          |
 | `%+`     | Named capture groups              | `/(?\<name\>\\w+)/; print $+{name};` |
 
-### Examples:
+#### Examples:
 
 ```perl
 # Capture group positions
@@ -196,7 +196,7 @@ if ($text =~ /(?<greeting>H\w+)\s+(?<target>W\w+)/) {
 }
 ```
 
-## Array and Hash Variables
+### Array and Hash Variables
 
 | Variable  | Description                    | Example Usage                    |
 | --------- | ------------------------------ | -------------------------------- |
@@ -204,7 +204,7 @@ if ($text =~ /(?<greeting>H\w+)\s+(?<target>W\w+)/) {
 | `$[`      | Array base index (deprecated)  | Not recommended for use          |
 | `@ISA`    | Inheritance array for packages | `@MyClass::ISA = qw(BaseClass);` |
 
-### Examples:
+#### Examples:
 
 ```perl
 # Array operations
@@ -217,9 +217,9 @@ push @fruits, "date";
 print "Now has " . scalar(@fruits) . " elements\n";
 ```
 
-## Practical Examples
+### Practical Examples
 
-### Error Handling Pattern
+#### Error Handling Pattern
 
 ```perl
 sub safe_operation {
@@ -237,7 +237,7 @@ sub safe_operation {
 }
 ```
 
-### Process Management
+#### Process Management
 
 ```perl
 # Create a unique temporary file
@@ -252,7 +252,7 @@ $SIG{INT} = sub {
 };
 ```
 
-### Configuration Based on Environment
+#### Configuration Based on Environment
 
 ```perl
 # Different behavior based on OS
@@ -269,7 +269,7 @@ my $config = do {
 print "Running on $^O with path separator '$config->{path_sep}'\n";
 ```
 
-## Best Practices
+### Best Practices
 
 1. **Use `local` for temporary changes** to special variables:
 
@@ -296,7 +296,7 @@ print "Running on $^O with path separator '$config->{path_sep}'\n";
 
 4. **Be careful with global special variables** - they can affect other parts of your program.
 
-## Common Pitfalls
+### Common Pitfalls
 
 - `$/` affects all file reading operations globally
 - `$|` affects all output, not just the current filehandle
@@ -305,314 +305,403 @@ print "Running on $^O with path separator '$config->{path_sep}'\n";
 
 This reference covers the most commonly used Perl special variables. Understanding these variables is crucial for writing effective Perl scripts and understanding existing Perl code.
 
-## Perl Special Variables
+## Perl Regular Expressions - Comprehensive Notes
 
-Perl has many special variables that provide access to system information, process details, and runtime context. These variables are essential for effective Perl programming and script automation.
+### Overview
 
-## Table of Contents
+Perl is renowned for its powerful regular expression capabilities. Regular expressions (regex) in Perl are patterns used to match character combinations in strings. They are fundamental to text processing and pattern matching in Perl.
 
-- [Default and Pattern Variables](#default-and-pattern-variables)
-- [Error and Status Variables](#error-and-status-variables)
-- [Process and System Variables](#process-and-system-variables)
-- [Input/Output Variables](#inputoutput-variables)
-- [Environment and Context Variables](#environment-and-context-variables)
-- [Regular Expression Variables](#regular-expression-variables)
-- [Array and Hash Variables](#array-and-hash-variables)
+More information on Regexes can be found in the [Perl Documentation](https://perldoc.perl.org/perlre) and regexes can be tested [Here](https://regex101.com/), selecting PCRE (PHP <7.3) to conform to Perl.
 
-## Default and Pattern Variables
+### Basic Syntax
 
-| Variable        | Description                         | Example Usage                          |
-| --------------- | ----------------------------------- | -------------------------------------- |
-| `$_`            | Default variable for many functions | `print if /pattern/;`                  |
-| `@_`            | Arguments passed to a subroutine    | `sub example { print $_[0]; }`         |
-| `$1, $2, $3...` | Capture groups from regex matches   | `=~/(\\w+)\\s+(\\w+)/; print "$1 $2";` |
-| `$&`            | The entire matched string           | `print "Matched: $&" if /pattern/;`    |
-| `$``            | String before the match             | `print "Before: $`" if /pattern/;`     |
-| `$'`            | String after the match              | `print "After: $'" if /pattern/;`      |
-
-### Examples:
+#### Pattern Matching Operator
 
 ```perl
-# Using $_ (default variable)
-for my $line (<DATA>) {
-    print if /ERROR/;  # $_ is implicit
-}
+if ($string =~ /pattern/) { ... }      # Matches pattern in $string
+if ($string !~ /pattern/) { ... }     # Does NOT match pattern in $string
+```
 
-# Using subroutine arguments (@_)
-sub greet {
-    my ($name, $greeting) = @_;
-    print "$greeting, $name!\n";
-}
-greet("Alice", "Hello");
+#### Basic Pattern Delimiters
 
-# Using capture groups
-my $text = "John Doe";
-if ($text =~ /(\w+)\s+(\w+)/) {
-    print "First: $1, Last: $2\n";
+```perl
+/pattern/         # Standard delimiter
+m/pattern/        # Explicit match operator
+m!pattern!        # Alternative delimiter
+m{pattern}        # Balanced delimiters
+m(pattern)        # Parentheses as delimiter
+```
+
+### Core Operations
+
+#### 1. Match
+
+```perl
+if ($string =~ /pattern/) {
+    print "Match found!\n";
 }
 ```
 
-## Error and Status Variables
-
-| Variable | Description                                | Example Usage                            |
-| -------- | ------------------------------------------ | ---------------------------------------- |
-| `$!`     | Error message from system calls            | `open my $fh, "<", "file" or die $!;`    |
-| `$@`     | Error message from `eval`                  | `eval { ... }; print $@ if $@;`          |
-| `$?`     | Status of last system command or backticks | `system("ls"); print "Exit code: $?\n";` |
-| `$^E`    | Extended OS error (Windows)                | `print "OS Error: $^E\n";`               |
-
-### Examples:
+#### 2. Match with Capture
 
 ```perl
-# File operation error handling
-open my $fh, "<", "nonexistent.txt" or die "Cannot open file: $!";
-
-# eval error handling
-eval {
-    my $result = 10 / 0;
-};
-if ($@) {
-    print "Caught error: $@\n";
-}
-
-# System command status
-system("false");  # Command that returns non-zero
-print "Command failed with exit code: " . ($? >> 8) . "\n";
-```
-
-## Process and System Variables
-
-| Variable | Description                    | Example Usage             |
-| -------- | ------------------------------ | ------------------------- |
-| `$$`     | Process ID of current script   | `print "PID: $$\n";`      |
-| `$0`     | Name of the current script     | `print "Script: $0\n";`   |
-| `$^O`    | Operating system name          | `print "OS: $^O\n";`      |
-| `$^X`    | Path to Perl interpreter       | `print "Perl: $^X\n";`    |
-| `$]`     | Perl version number            | `print "Version: $]\n";`  |
-| `$^V`    | Perl version as version object | `print "Version: $^V\n";` |
-
-### Examples:
-
-```perl
-# Process information
-print "Running script '$0' with PID $$ on $^O\n";
-print "Using Perl $^V at $^X\n";
-
-# Creating lock files with PID
-my $lockfile = "/tmp/script.lock.$$";
-open my $lock, ">", $lockfile or die "Cannot create lock: $!";
-print $lock "$$\n";
-close $lock;
-```
-
-## Input/Output Variables
-
-| Variable | Description                            | Example Usage                      |
-| -------- | -------------------------------------- | ---------------------------------- | --- | ------------------------- |
-| `$/`     | Input record separator (default `\n`)  | `local $/ = undef;`                |
-| `$\`     | Output record separator                | `$\ = "\n"; print "auto newline";` |
-| `$,`     | Output field separator                 | `$, = ", "; print @array;`         |
-| `$"`     | List separator for array interpolation | `$" = ":"; print "@array";`        |
-| `$.`     | Current line number                    | `print "Line $.: $_" while <>;`    |
-| `$       | `                                      | Auto-flush output buffer           | `$  | = 1; # Enable auto-flush` |
-
-### Examples:
-
-```perl
-# Reading entire file at once
-{
-    local $/ = undef;  # Slurp mode
-    my $content = <$fh>;
-    print "File size: " . length($content) . " characters\n";
-}
-
-# Custom field separators
-{
-    local $, = " | ";  # Set field separator
-    print "one", "two", "three";  # Outputs: one | two | three
-}
-
-# Line numbering
-while (<DATA>) {
-    chomp;
-    print "Line $.: $_\n";
+if ($string =~ /(\d+)-(\d+)-(\d+)/) {
+    my ($year, $month, $day) = ($1, $2, $3);
+    print "Date: $month/$day/$year\n";
 }
 ```
 
-## Environment and Context Variables
-
-| Variable | Description                    | Example Usage                         |
-| -------- | ------------------------------ | ------------------------------------- |
-| `%ENV`   | Environment variables hash     | `print $ENV{'PATH'};`                 |
-| `@ARGV`  | Command line arguments         | `print "Args: @ARGV\n";`              |
-| `$#ARGV` | Index of last element in @ARGV | `print "Arg count: " . ($#ARGV + 1);` |
-| `@INC`   | Module search paths            | `print "Paths: @INC\n";`              |
-| `%INC`   | Loaded modules hash            | `print "Loaded: " . keys(%INC);`      |
-
-### Examples:
+#### 3. Substitute
 
 ```perl
-# Environment variables
-print "User: $ENV{USER}\n" if exists $ENV{USER};
-print "Home: $ENV{HOME}\n" if exists $ENV{HOME};
+$string =~ s/pattern/replacement/;      # Replace first occurrence
+$string =~ s/pattern/replacement/g;     # Replace all occurrences (global)
+```
 
-# Command line processing
-if (@ARGV) {
-    print "Processing " . scalar(@ARGV) . " arguments:\n";
-    for my $i (0..$#ARGV) {
-        print "  Arg $i: $ARGV[$i]\n";
+#### 4. Global Substitute
+
+```perl
+$string =~ s/old/new/g;                 # Replace all occurrences
+$string =~ s/pattern/replacement/gi;    # Case-insensitive global replace
+```
+
+#### 5. Substitute with Modifiers
+
+```perl
+$string =~ s/pattern/replacement/gix;   # Global, case-insensitive, extended
+```
+
+#### 6. Match and Modify
+
+```perl
+$string =~ s/(pattern)/$1 modified/;    # Capture and modify
+```
+
+#### 7. Global Match
+
+```perl
+my @matches = ($string =~ /pattern/g);  # Find all matches
+while ($string =~ /pattern/g) {         # Process each match
+    print "Found: $&\n";
+}
+```
+
+#### 8. Split
+
+```perl
+my @array = split /pattern/, $string;   # Split string using pattern as delimiter
+```
+
+#### 9. Positive Lookahead
+
+```perl
+if ($string =~ /pattern(?=lookahead)/) { ... }  # Matches pattern only if followed by lookahead
+```
+
+#### 10. Negative Lookahead
+
+```perl
+if ($string =~ /pattern(?!lookahead)/) { ... }  # Matches pattern only if NOT followed by lookahead
+```
+
+#### 11. Positive Lookbehind
+
+```perl
+if ($string =~ /(?<=lookbehind)pattern/) { ... } # Matches pattern only if preceded by lookbehind
+```
+
+#### 12. Negative Lookbehind
+
+```perl
+if ($string =~ /(?<!lookbehind)pattern/) { ... } # Matches pattern only if NOT preceded by lookbehind
+```
+
+#### 13. Find and Print
+
+```perl
+while ($string =~ /pattern/g) {
+    print "Match: $&\n";               # $& contains the matched text
+}
+```
+
+#### 14. Replace in File
+
+```perl
+perl -pe 's/pattern/replacement/g' file.txt    # One-liner to replace in file
+```
+
+### Regular Expression Modifiers
+
+#### Common Modifiers
+
+- `i` - Case insensitive
+- `g` - Global (find/replace all occurrences)
+- `m` - Multiline mode (^ and $ match line boundaries)
+- `s` - Single line mode (. matches newlines)
+- `x` - Extended mode (ignore whitespace, allow comments)
+- `o` - Compile once (for efficiency with variables)
+
+#### Examples with Modifiers
+
+```perl
+$string =~ /pattern/i;          # Case insensitive
+$string =~ /pattern/g;          # Global match
+$string =~ /pattern/gi;         # Case insensitive + global
+$string =~ /pattern/gix;        # Case insensitive + global + extended
+```
+
+### Character Classes and Metacharacters
+
+#### Basic Character Classes
+
+```perl
+.           # Any character except newline
+\d          # Digit [0-9]
+\D          # Non-digit [^0-9]
+\w          # Word character [a-zA-Z0-9_]
+\W          # Non-word character [^a-zA-Z0-9_]
+\s          # Whitespace [ \t\n\r\f]
+\S          # Non-whitespace [^ \t\n\r\f]
+```
+
+#### Custom Character Classes
+
+```perl
+[abc]       # Match a, b, or c
+[a-z]       # Match any lowercase letter
+[A-Z]       # Match any uppercase letter
+[0-9]       # Match any digit
+[^abc]      # Match anything except a, b, or c
+[a-zA-Z0-9] # Match alphanumeric characters
+```
+
+#### Quantifiers
+
+```perl
+*           # Zero or more
++           # One or more
+?           # Zero or one (optional)
+{n}         # Exactly n times
+{n,}        # n or more times
+{n,m}       # Between n and m times
+*?          # Non-greedy zero or more
++?          # Non-greedy one or more
+??          # Non-greedy zero or one
+```
+
+#### Anchors
+
+```perl
+^           # Beginning of string/line
+$           # End of string/line
+\b          # Word boundary
+\B          # Non-word boundary
+\A          # Beginning of string only
+\Z          # End of string only
+\z          # Absolute end of string
+```
+
+### Capture Groups
+
+#### Basic Capturing
+
+```perl
+if ($string =~ /(\d+)-(\d+)-(\d+)/) {
+    print "Year: $1, Month: $2, Day: $3\n";
+}
+```
+
+#### Named Captures (Perl 5.10+)
+
+```perl
+if ($string =~ /(?<year>\d+)-(?<month>\d+)-(?<day>\d+)/) {
+    print "Year: $+{year}, Month: $+{month}, Day: $+{day}\n";
+}
+```
+
+#### Non-capturing Groups
+
+```perl
+/(?:pattern)/       # Non-capturing group
+```
+
+### Advanced Features
+
+#### Backreferences
+
+```perl
+/(\w+)\s+\1/        # Match repeated words (e.g., "the the")
+```
+
+#### Recursive Patterns (Perl 5.10+)
+
+```perl
+/\( (?: [^()]+ | (?R) )* \)/x    # Match balanced parentheses
+```
+
+#### Conditional Patterns
+
+```perl
+/(condition)(?(1)then|else)/     # If condition matches, use "then", else "else"
+```
+
+### Practical Examples
+
+#### Email Validation
+
+```perl
+if ($email =~ /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) {
+    print "Valid email\n";
+}
+```
+
+#### Phone Number Extraction
+
+```perl
+my @phones = ($text =~ /\b\d{3}-\d{3}-\d{4}\b/g);
+```
+
+#### URL Parsing
+
+```perl
+if ($url =~ m{^(https?)://([^/]+)(/.*)$}) {
+    my ($protocol, $host, $path) = ($1, $2, $3);
+    print "Protocol: $protocol, Host: $host, Path: $path\n";
+}
+```
+
+#### Log File Processing
+
+```perl
+while (<LOG>) {
+    if (/^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}) \[(\w+)\] (.+)$/) {
+        my ($date, $time, $level, $message) = ($1, $2, $3, $4);
+        print "[$level] $date $time: $message\n" if $level eq 'ERROR';
     }
-} else {
-    print "No arguments provided\n";
-}
-
-# Module information
-use Data::Dumper;
-print "Data::Dumper loaded from: $INC{'Data/Dumper.pm'}\n";
-```
-
-## Regular Expression Variables
-
-| Variable | Description                       | Example Usage                        |
-| -------- | --------------------------------- | ------------------------------------ |
-| `$+`     | Last matched capture group        | `/(a+)(b+)/; print "Last: $+";`      |
-| `$^N`    | Most recent capture group         | Used in regex callbacks              |
-| `@+`     | End positions of capture groups   | `print "Ends at: $+[1]";`            |
-| `@-`     | Start positions of capture groups | `print "Starts at: $-[1]";`          |
-| `%+`     | Named capture groups              | `/(?\<name\>\\w+)/; print $+{name};` |
-
-### Examples:
-
-```perl
-# Capture group positions
-my $text = "Hello World";
-if ($text =~ /(H\w+)\s+(W\w+)/) {
-    print "Match 1: '$1' at positions $-[1]-$+[1]\n";
-    print "Match 2: '$2' at positions $-[2]-$+[2]\n";
-    print "Last capture: '$+'\n";
-}
-
-# Named captures
-if ($text =~ /(?<greeting>H\w+)\s+(?<target>W\w+)/) {
-    print "Greeting: $+{greeting}\n";
-    print "Target: $+{target}\n";
 }
 ```
 
-## Array and Hash Variables
-
-| Variable  | Description                    | Example Usage                    |
-| --------- | ------------------------------ | -------------------------------- |
-| `$#array` | Index of last element in array | `print "Last index: $#array";`   |
-| `$[`      | Array base index (deprecated)  | Not recommended for use          |
-| `@ISA`    | Inheritance array for packages | `@MyClass::ISA = qw(BaseClass);` |
-
-### Examples:
+#### Text Cleaning
 
 ```perl
-# Array operations
-my @fruits = qw(apple banana cherry);
-print "Array has " . ($#fruits + 1) . " elements\n";
-print "Last element: $fruits[$#fruits]\n";
-
-# Adding elements
-push @fruits, "date";
-print "Now has " . scalar(@fruits) . " elements\n";
+$text =~ s/^\s+|\s+$//g;        # Trim whitespace
+$text =~ s/\s+/ /g;             # Normalize whitespace
+$text =~ s/[^\w\s]//g;          # Remove non-word characters
 ```
 
-## Practical Examples
+### Special Variables
 
-### Error Handling Pattern
+#### Match Variables
 
 ```perl
-sub safe_operation {
-    my ($filename) = @_;
+$&          # The matched string
+$`          # String before the match
+$'          # String after the match
+$1, $2, $3  # Captured groups
+$+          # Last captured group
+@+          # Array of match end positions
+@-          # Array of match start positions
+%+          # Named capture hash
+```
 
-    open my $fh, "<", $filename or do {
-        warn "Cannot open '$filename': $!";
-        return;
-    };
+#### Example Usage
 
-    my $content = do { local $/; <$fh> };
-    close $fh;
-
-    return $content;
+```perl
+if ($string =~ /(perl) (regex)/) {
+    print "Before: '$`'\n";     # Text before match
+    print "Match: '$&'\n";      # The full match
+    print "After: '$''\n";      # Text after match
+    print "Group 1: '$1'\n";    # First capture group
+    print "Group 2: '$2'\n";    # Second capture group
 }
 ```
 
-### Process Management
+### Performance Tips
 
-```perl
-# Create a unique temporary file
-my $temp_file = "/tmp/process_$$.tmp";
-print "Creating temporary file: $temp_file\n";
-
-# Signal handler using process ID
-$SIG{INT} = sub {
-    print "\nReceived interrupt signal in process $$\n";
-    unlink $temp_file if -e $temp_file;
-    exit 1;
-};
-```
-
-### Configuration Based on Environment
-
-```perl
-# Different behavior based on OS
-my $config = do {
-    if ($^O eq 'MSWin32') {
-        { path_sep => '\\', line_end => "\r\n" }
-    } elsif ($^O =~ /darwin|linux/) {
-        { path_sep => '/', line_end => "\n" }
-    } else {
-        { path_sep => '/', line_end => "\n" }  # Default Unix-like
-    }
-};
-
-print "Running on $^O with path separator '$config->{path_sep}'\n";
-```
-
-## Best Practices
-
-1. **Use `local` for temporary changes** to special variables:
+1. **Compile Once**: Use the `o` modifier for patterns with variables
 
    ```perl
-   {
-       local $/ = "";  # Paragraph mode
-       while (<DATA>) {
-           # Process paragraphs
-       }
-   }  # $/ automatically restored
+   /$variable/o
    ```
 
-2. **Always check error variables** after system operations:
+2. **Anchor Patterns**: Use `^` and `$` when appropriate
 
    ```perl
-   system("important_command") == 0 or die "Command failed: $?";
+   /^pattern$/     # Much faster for exact matches
    ```
 
-3. **Use meaningful variable names** instead of special variables when possible:
+3. **Avoid Backtracking**: Use atomic groups and possessive quantifiers
 
    ```perl
-   my ($name, $age) = @_;  # Better than using $_[0], $_[1]
+   /(?>\d+)/       # Atomic group
+   /\d++/          # Possessive quantifier
    ```
 
-4. **Be careful with global special variables** - they can affect other parts of your program.
+4. **Use `\Q...\E` for Literal Strings**
+   ```perl
+   /\Q$literal_string\E/
+   ```
 
-## Common Pitfalls
+### Common Pitfalls
 
-- `$/` affects all file reading operations globally
-- `$|` affects all output, not just the current filehandle
-- `$_` can be modified by many functions, causing unexpected behavior
-- `@_` is aliased to actual arguments, modifications affect the original values
+1. **Greedy vs Non-greedy Matching**
 
-This reference covers the most commonly used Perl special variables. Understanding these variables is crucial for writing effective Perl scripts and understanding existing Perl code.
+   ```perl
+   # Greedy (matches as much as possible)
+   $html =~ /<.*>/;        # Bad: matches entire string
 
-## Input/Output (IO) in Perl
+   # Non-greedy (matches as little as possible)
+   $html =~ /<.*?>/;       # Good: matches individual tags
+   ```
+
+2. **Escaping Special Characters**
+
+   ```perl
+   /\./            # Literal dot
+   /\$/            # Literal dollar sign
+   /\(/            # Literal parenthesis
+   ```
+
+3. **Case Sensitivity**
+   ```perl
+   /perl/          # Case sensitive
+   /perl/i         # Case insensitive
+   ```
+
+### Best Practices
+
+1. Use meaningful variable names for captures
+2. Comment complex regex patterns using the `x` modifier
+3. Test regex patterns thoroughly with edge cases
+4. Consider using `qr//` for reusable patterns
+5. Use appropriate anchors to avoid unintended matches
+6. Validate user input with regex carefully to avoid security issues
+
+### Example: Complex Pattern with Comments
+
+```perl
+my $email_regex = qr{
+    ^                           # Start of string
+    [a-zA-Z0-9._%+-]+          # Username part
+    @                          # @ symbol
+    [a-zA-Z0-9.-]+             # Domain name
+    \.                         # Literal dot
+    [a-zA-Z]{2,}               # Top-level domain
+    $                          # End of string
+}x;
+
+if ($email =~ /$email_regex/) {
+    print "Valid email address\n";
+}
+```
+
+Regular expressions in Perl are incredibly powerful and flexible, making them essential for text processing, data validation, and string manipulation tasks.
+
+# Input/Output (IO) in Perl
 
 Perl provides a rich set of IO capabilities for handling different types of input and output operations. Understanding the different kinds of IO is crucial for effective Perl programming. This section covers the major IO mechanisms available in Perl, their characteristics, and when to use each type.
 
-### Types of IO in Perl
+#### Types of IO in Perl
 
 Perl supports several categories of IO operations:
 
@@ -625,9 +714,9 @@ Perl supports several categories of IO operations:
 7. **Tied IO** - Custom IO behavior through tied variables
 8. **Specialized IO** - Domain-specific IO mechanisms
 
-## Standard File Handles (Stream IO)
+### Standard File Handles (Stream IO)
 
-### STDIN, STDOUT, and STDERR
+#### STDIN, STDOUT, and STDERR
 
 Perl provides three predefined file handles for standard input, output, and error streams. These are fundamental to Unix/Linux philosophy and enable command-line tools to work together through pipes and redirection.
 
@@ -666,7 +755,7 @@ print STDERR "Error message\n";
 warn "Warning message";  # Automatically goes to STDERR
 ```
 
-### File Handle Operations (File-based IO)
+#### File Handle Operations (File-based IO)
 
 File handles provide the primary mechanism for file-based IO operations. They can be opened in different modes and support various reading/writing patterns.
 
@@ -743,11 +832,11 @@ close($append);
 close($rw);
 ```
 
-## Sockets (Network IO)
+### Sockets (Network IO)
 
 Sockets provide the foundation for network communication in Perl. They enable programs to communicate over networks using various protocols and connection types.
 
-### Socket Types and Characteristics
+#### Socket Types and Characteristics
 
 **TCP Sockets (Stream Sockets)**
 
@@ -772,7 +861,7 @@ Sockets provide the foundation for network communication in Perl. They enable pr
 - **Secure** - Cannot be accessed from network
 - **File-based** - Appear as files in filesystem
 
-### TCP Sockets
+#### TCP Sockets
 
 ```perl
 use IO::Socket::INET;
@@ -808,7 +897,7 @@ print "Server says: $response";
 close($client);
 ```
 
-### UDP Sockets
+#### UDP Sockets
 
 ```perl
 use IO::Socket::INET;
@@ -834,11 +923,11 @@ my $udp_client = IO::Socket::INET->new(
 send($udp_client, "UDP message", 0);
 ```
 
-## Pipes (Process IO)
+### Pipes (Process IO)
 
 Pipes enable inter-process communication (IPC) and allow Perl programs to interact with external commands and other processes. They provide a way to pass data between processes without using temporary files.
 
-### Pipe Types and Characteristics
+#### Pipe Types and Characteristics
 
 **Named Pipes (FIFOs)**
 
@@ -863,7 +952,7 @@ Pipes enable inter-process communication (IPC) and allow Perl programs to intera
 - **Process-dependent** - Tied to specific processes
 - **Best for** - Interactive communication with external programs
 
-### Named Pipes (FIFOs)
+#### Named Pipes (FIFOs)
 
 ```perl
 # Create a named pipe
@@ -881,7 +970,7 @@ print "Received: $data";
 close($pipe_in);
 ```
 
-### Anonymous Pipes
+#### Anonymous Pipes
 
 ```perl
 # Execute command and capture output
@@ -899,7 +988,7 @@ print $sort "banana\n";
 close($sort);
 ```
 
-### Bidirectional Pipes
+#### Bidirectional Pipes
 
 ```perl
 use IPC::Open2;
@@ -917,11 +1006,11 @@ close($in);
 waitpid($pid, 0);
 ```
 
-## String IO (Memory IO)
+### String IO (Memory IO)
 
 String IO allows you to treat strings and memory as file handles, enabling you to use familiar file operations on in-memory data. This is useful for parsing, data transformation, and testing without creating temporary files.
 
-### String IO Characteristics
+#### String IO Characteristics
 
 **Advantages:**
 
@@ -976,11 +1065,11 @@ close($scalar_fh);
 print "Scalar contains: $scalar_string";
 ```
 
-## Ties (Custom IO)
+### Ties (Custom IO)
 
 Ties allow you to associate built-in Perl variables with custom classes, enabling special behavior for IO operations. This provides a way to create custom IO mechanisms that look and behave like standard Perl variables.
 
-### Tie Types and Characteristics
+#### Tie Types and Characteristics
 
 **Tied File Handles**
 
@@ -1019,7 +1108,7 @@ Ties allow you to associate built-in Perl variables with custom classes, enablin
 - **Complexity** - Requires understanding of tie interface
 - **Debugging** - Can be difficult to debug tied behavior
 
-### Tied File Handles
+#### Tied File Handles
 
 ```perl
 package MyTiedHandle;
@@ -1052,7 +1141,7 @@ print MYHANDLE "This will be timestamped\n";
 printf MYHANDLE "Number: %d\n", 42;
 ```
 
-### Tied Scalars for IO
+#### Tied Scalars for IO
 
 ```perl
 package TiedScalar;
@@ -1086,11 +1175,11 @@ $file_content = "New content";  # Writes to file
 print $file_content;            # Reads from file
 ```
 
-## Memory Files (Advanced Memory IO)
+### Memory Files (Advanced Memory IO)
 
 Memory files provide sophisticated in-memory file-like operations, allowing you to work with data in memory using familiar file operations. They're particularly useful for temporary data processing and testing.
 
-### Memory File Types and Characteristics
+#### Memory File Types and Characteristics
 
 **IO::Scalar**
 
@@ -1153,7 +1242,7 @@ print $mem_fh "Another line\n";
 print "Memory contains:\n$mem_data";
 ```
 
-### Using Anonymous Temporary Files
+#### Using Anonymous Temporary Files
 
 ```perl
 use File::Temp;
@@ -1173,11 +1262,11 @@ while (my $line = <$temp_fh>) {
 }
 ```
 
-## DBI Handles (Database IO)
+### DBI Handles (Database IO)
 
 Database handles (DBI) provide IO operations for database connectivity and data manipulation. DBI is Perl's standard database interface, providing a consistent API for working with various database systems.
 
-### Database IO Characteristics
+#### Database IO Characteristics
 
 **Connection Types:**
 
@@ -1281,7 +1370,7 @@ $select_sth->finish();
 $dbh->disconnect();
 ```
 
-### Advanced DBI Features
+#### Advanced DBI Features
 
 ```perl
 # Using placeholders and bind parameters
@@ -1318,9 +1407,9 @@ my $first_user = $dbh->selectrow_hashref("SELECT * FROM users LIMIT 1");
 print "First user: $first_user->{name}\n" if $first_user;
 ```
 
-## Best Practices and Error Handling
+### Best Practices and Error Handling
 
-### Error Handling
+#### Error Handling
 
 ```perl
 # Always check return values
@@ -1347,7 +1436,7 @@ try {
 };
 ```
 
-### Resource Management
+#### Resource Management
 
 ```perl
 # Use lexical file handles for automatic cleanup
@@ -1361,7 +1450,7 @@ my $dbh = DBI->connect(...);
 END { $dbh->disconnect() if $dbh; }
 ```
 
-### Performance Considerations
+#### Performance Considerations
 
 ```perl
 # Use appropriate buffering
@@ -1380,11 +1469,11 @@ for my $id (@ids) {
 }
 ```
 
-## Specialized IO Types
+### Specialized IO Types
 
 Beyond the core IO mechanisms, Perl supports various specialized IO types for specific domains and use cases.
 
-### Serial/Device IO
+#### Serial/Device IO
 
 ```perl
 use Device::SerialPort;
@@ -1404,7 +1493,7 @@ print "Received: $data\n";
 $port->write("ATZ\n");
 ```
 
-### HTTP/Web IO
+#### HTTP/Web IO
 
 ```perl
 use LWP::UserAgent;
@@ -1422,7 +1511,7 @@ if ($response->is_success) {
 }
 ```
 
-### XML/JSON IO
+#### XML/JSON IO
 
 ```perl
 use XML::Simple;
@@ -1439,7 +1528,7 @@ my $json_ref = decode_json($json_data);
 print "JSON name: $json_ref->{name}\n";
 ```
 
-### Compressed File IO
+#### Compressed File IO
 
 ```perl
 use IO::Compress::Gzip;
@@ -1459,9 +1548,9 @@ while (my $line = <$gunzip>) {
 }
 ```
 
-## IO Selection Guidelines
+### IO Selection Guidelines
 
-### When to Use Each IO Type
+#### When to Use Each IO Type
 
 **File-based IO:**
 
@@ -1519,11 +1608,11 @@ while (my $line = <$gunzip>) {
 - ❌ High-performance applications
 - ❌ Simple operations
 
-## Conclusion
+### Conclusion
 
 Perl's IO system is comprehensive and flexible, supporting everything from simple file operations to complex network programming and database interactions. Understanding the different types of IO and their characteristics is crucial for choosing the right tool for each task.
 
-### Key Principles for Effective IO:
+#### Key Principles for Effective IO:
 
 1. **Choose the right IO type** for your specific use case
 2. **Understand the characteristics** of each IO mechanism
@@ -1533,7 +1622,7 @@ Perl's IO system is comprehensive and flexible, supporting everything from simpl
 6. **Consider performance implications** of your IO choices
 7. **Plan for scalability** when designing IO-intensive applications
 
-### Best Practices Summary:
+#### Best Practices Summary:
 
 - **File operations**: Use lexical file handles and proper error checking
 - **Network operations**: Implement timeouts and connection pooling
