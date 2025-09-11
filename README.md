@@ -2,6 +2,145 @@
 
 Some tips / things of notes for myself while I'm learning Perl
 
+## Perl Variables and Data Types
+
+### Variable Sigils: $, @, and %
+
+Perl uses different sigils (symbols) to indicate variable types and context:
+
+#### **$ (Scalar Variables)**
+
+- **Single values**: strings, numbers, references
+- **Context**: Scalar context
+- **Examples**:
+
+```perl
+my $name = "John";
+my $age = 30;
+my $price = 19.99;
+my $reference = \@array;  # Reference to array
+```
+
+#### **@ (Array Variables)**
+
+- **Lists of values**: indexed collections
+- **Context**: List context
+- **Examples**:
+
+```perl
+my @fruits = ("apple", "banana", "cherry");
+my @numbers = (1, 2, 3, 4, 5);
+my @mixed = ("text", 42, 3.14);
+
+# Array operations
+push @fruits, "date";
+pop @fruits;  # Remove last element
+shift @fruits;  # Remove first element
+unshift @fruits, "grape";  # Add to beginning
+```
+
+#### **% (Hash Variables)**
+
+- **Key-value pairs**: associative arrays
+- **Context**: List context (when flattened)
+- **Examples**:
+
+```perl
+my %person = (
+    name => "John",
+    age => 30,
+    city => "New York"
+);
+
+# Hash operations
+$person{email} = "john@example.com";  # Add new key
+delete $person{age};  # Remove key
+my @keys = keys %person;  # Get all keys
+my @values = values %person;  # Get all values
+```
+
+#### **Context Matters**
+
+```perl
+my @array = (1, 2, 3, 4, 5);
+my $scalar = @array;  # $scalar = 5 (array length)
+my @list = @array;    # @list = (1, 2, 3, 4, 5) (copy)
+
+my %hash = (a => 1, b => 2);
+my $scalar = %hash;   # $scalar = "2/8" (fractional representation)
+my @list = %hash;     # @list = ("a", 1, "b", 2) (flattened)
+```
+
+## Functions and Subroutines
+
+### Function Declaration and Usage
+
+#### **Basic Subroutine Syntax**
+
+```perl
+sub greet {
+    my ($name, $greeting) = @_;
+    return "$greeting, $name!";
+}
+
+# Calling the function
+my $message = greet("Alice", "Hello");
+print $message;  # Output: Hello, Alice!
+```
+
+#### **Parameter Handling**
+
+```perl
+sub process_data {
+    my ($required, $optional, $rest) = @_;
+
+    # Default values
+    $optional //= "default";
+
+    # Process rest of arguments
+    my @remaining = @_[3..$#_];
+
+    return "Processed: $required, $optional";
+}
+```
+
+#### **Return Values**
+
+```perl
+sub get_coordinates {
+    my ($x, $y) = @_;
+    return ($x, $y);  # Returns a list
+}
+
+sub get_person {
+    my ($name, $age) = @_;
+    return {           # Returns a hash reference
+        name => $name,
+        age => $age
+    };
+}
+
+# Using return values
+my ($lat, $lon) = get_coordinates(40.7128, -74.0060);
+my $person = get_person("John", 30);
+print $person->{name};  # Output: John
+```
+
+#### **Prototypes (Advanced)**
+
+```perl
+sub add($$) {  # Expects exactly 2 scalars
+    my ($a, $b) = @_;
+    return $a + $b;
+}
+
+sub process_array(\@) {  # Expects array reference
+    my ($array_ref) = @_;
+    # Process array
+}
+```
+
+
 ## Perl Special Variables
 
 Perl has many special variables that provide access to system information, process details, and runtime context. These variables are essential for effective Perl programming and script automation.
@@ -1631,144 +1770,6 @@ Perl's IO system is comprehensive and flexible, supporting everything from simpl
 - **Custom IO**: Use ties sparingly and document behavior clearly
 
 Whether you're working with files, networks, databases, or custom IO mechanisms, Perl provides the tools needed for efficient and reliable input/output operations. The key is understanding the strengths and limitations of each IO type and applying them appropriately to your specific requirements.
-
-## Perl Variables and Data Types
-
-### Variable Sigils: $, @, and %
-
-Perl uses different sigils (symbols) to indicate variable types and context:
-
-#### **$ (Scalar Variables)**
-
-- **Single values**: strings, numbers, references
-- **Context**: Scalar context
-- **Examples**:
-
-```perl
-my $name = "John";
-my $age = 30;
-my $price = 19.99;
-my $reference = \@array;  # Reference to array
-```
-
-#### **@ (Array Variables)**
-
-- **Lists of values**: indexed collections
-- **Context**: List context
-- **Examples**:
-
-```perl
-my @fruits = ("apple", "banana", "cherry");
-my @numbers = (1, 2, 3, 4, 5);
-my @mixed = ("text", 42, 3.14);
-
-# Array operations
-push @fruits, "date";
-pop @fruits;  # Remove last element
-shift @fruits;  # Remove first element
-unshift @fruits, "grape";  # Add to beginning
-```
-
-#### **% (Hash Variables)**
-
-- **Key-value pairs**: associative arrays
-- **Context**: List context (when flattened)
-- **Examples**:
-
-```perl
-my %person = (
-    name => "John",
-    age => 30,
-    city => "New York"
-);
-
-# Hash operations
-$person{email} = "john@example.com";  # Add new key
-delete $person{age};  # Remove key
-my @keys = keys %person;  # Get all keys
-my @values = values %person;  # Get all values
-```
-
-#### **Context Matters**
-
-```perl
-my @array = (1, 2, 3, 4, 5);
-my $scalar = @array;  # $scalar = 5 (array length)
-my @list = @array;    # @list = (1, 2, 3, 4, 5) (copy)
-
-my %hash = (a => 1, b => 2);
-my $scalar = %hash;   # $scalar = "2/8" (fractional representation)
-my @list = %hash;     # @list = ("a", 1, "b", 2) (flattened)
-```
-
-## Functions and Subroutines
-
-### Function Declaration and Usage
-
-#### **Basic Subroutine Syntax**
-
-```perl
-sub greet {
-    my ($name, $greeting) = @_;
-    return "$greeting, $name!";
-}
-
-# Calling the function
-my $message = greet("Alice", "Hello");
-print $message;  # Output: Hello, Alice!
-```
-
-#### **Parameter Handling**
-
-```perl
-sub process_data {
-    my ($required, $optional, $rest) = @_;
-
-    # Default values
-    $optional //= "default";
-
-    # Process rest of arguments
-    my @remaining = @_[3..$#_];
-
-    return "Processed: $required, $optional";
-}
-```
-
-#### **Return Values**
-
-```perl
-sub get_coordinates {
-    my ($x, $y) = @_;
-    return ($x, $y);  # Returns a list
-}
-
-sub get_person {
-    my ($name, $age) = @_;
-    return {           # Returns a hash reference
-        name => $name,
-        age => $age
-    };
-}
-
-# Using return values
-my ($lat, $lon) = get_coordinates(40.7128, -74.0060);
-my $person = get_person("John", 30);
-print $person->{name};  # Output: John
-```
-
-#### **Prototypes (Advanced)**
-
-```perl
-sub add($$) {  # Expects exactly 2 scalars
-    my ($a, $b) = @_;
-    return $a + $b;
-}
-
-sub process_array(\@) {  # Expects array reference
-    my ($array_ref) = @_;
-    # Process array
-}
-```
 
 ## Command Line Perl: One-liners
 
